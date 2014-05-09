@@ -67,6 +67,7 @@ endif
 
 ifneq ($(WINDOWS_HOST_ONLY),1)
     commonSources += \
+        abort_socket.c \
         fs.c \
         multiuser.c
 endif
