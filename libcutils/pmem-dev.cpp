@@ -96,11 +96,9 @@
 #define INVALID_FD        -1
 //#define PAGE_SIZE       4096
 
-
 static char p_value[PROPERTY_VALUE_MAX] = "";
 static bool p_res = 0;
 
-    
 static size_t align_size(size_t size)
 {
 	return ((size + PAGE_SIZE-1) & ~(PAGE_SIZE-1));
@@ -111,7 +109,7 @@ static size_t align_size(size_t size)
 // =============================================================================
 //
 // The statck related function is copy from bionic
-// 
+//
 
 typedef struct
 {
@@ -186,7 +184,7 @@ void* pmem_alloc(size_t size, int *pfd)
     }
 
     *pfd = -1;
-    
+
     fd = open(PMEM_DEVICE_NAME, (O_RDWR | O_SYNC));
     if (INVALID_FD == fd)
     {
@@ -196,12 +194,12 @@ void* pmem_alloc(size_t size, int *pfd)
 
     aligned_size = align_size(size);
     base = mmap(0, aligned_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-    if (MAP_FAILED == base) 
+    if (MAP_FAILED == base)
     {
         LOGE("[PMEM] mmap size %d failed!", aligned_size);
         goto mmap_failed;
     }
-    
+
     region.len = aligned_size;
     err = ioctl(fd, PMEM_MAP, &region);
     if (IOCTL_FAILED == err)
@@ -212,14 +210,14 @@ void* pmem_alloc(size_t size, int *pfd)
 
     property_get("pm.dumpstack", p_value, "0"); //if not set, disable by default 
     p_res = atoi(p_value);
-    if (p_res) 
+    if (p_res)
     {
         LOGE("[PMEM] pmem_alloc: base: 0x%08x, size: %d\n", (int)base, aligned_size);
         dump_stack_trace();
     }
 
     *pfd = fd;
-    
+
     return base;
 
 
@@ -230,7 +228,7 @@ pmem_map_failed:
 mmap_failed:
     close(fd);
 open_failed:
-    return NULL;    
+    return NULL;
 }
 
 
@@ -242,13 +240,13 @@ void* pmem_alloc_sync(size_t size, int *pfd)
     pmem_region region = { 0, 0 };
     int         err;
 
-	if (NULL == pfd)
-	{
-		return NULL;
-	}
+    if (NULL == pfd)
+    {
+        return NULL;
+    }
 
-	*pfd = -1;
-    
+    *pfd = -1;
+
     fd = open(PMEM_DEVICE_NAME, O_RDWR|O_SYNC);
     if (INVALID_FD == fd)
     {
@@ -258,12 +256,12 @@ void* pmem_alloc_sync(size_t size, int *pfd)
 
     aligned_size = align_size(size);
     base = mmap(0, aligned_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-    if (MAP_FAILED == base) 
+    if (MAP_FAILED == base)
     {
         LOGE("[PMEM] mmap size %d failed!", aligned_size);
         goto mmap_failed;
     }
-    
+
     region.len = aligned_size;
     err = ioctl(fd, PMEM_MAP, &region);
     if (IOCTL_FAILED == err)
@@ -274,7 +272,7 @@ void* pmem_alloc_sync(size_t size, int *pfd)
 
     property_get("pm.dumpstack", p_value, "0"); //if not set, disable by default 
     p_res = atoi(p_value);
-    if (p_res) 
+    if (p_res)
     {
         LOGE("[PMEM] pmem_alloc_sync: base: 0x%08x, size: %d\n", (int)base, aligned_size);
         dump_stack_trace();
@@ -291,14 +289,14 @@ pmem_map_failed:
 mmap_failed:
     close(fd);
 open_failed:
-    return NULL;    
+    return NULL;
 }
 
 
 int  pmem_free(void *ptr, size_t size, int fd)
 {
     int err, ret = 0;
-    size_t aligned_size = align_size(size);    
+    size_t aligned_size = align_size(size);
 
     pmem_region region = { 0, aligned_size };
     err = ioctl(fd, PMEM_UNMAP, &region);
@@ -307,7 +305,7 @@ int  pmem_free(void *ptr, size_t size, int fd)
         LOGE("PMEM_UNMAP size %d failed!", size);
         ret = err;
     }
-    
+
     err = munmap(ptr, aligned_size);
     if (UNMAP_FAILED == err)
     {
@@ -322,19 +320,16 @@ int  pmem_free(void *ptr, size_t size, int fd)
         ret = err;
     }
 
-
-    property_get("pm.dumpstack", p_value, "0"); //if not set, disable by default 
+    property_get("pm.dumpstack", p_value, "0"); //if not set, disable by default
     p_res = atoi(p_value);
-    if (p_res) 
+    if (p_res)
     {
         LOGE("[PMEM] pmem_free: base: 0x%08x, size: %d\n", (int)ptr, aligned_size);
         dump_stack_trace();
     }
 
-    
     return ret;
 }
-
 
 void* pmem_get_phys(int fd)
 {
@@ -351,59 +346,56 @@ void* pmem_get_phys(int fd)
 
 void pmem_cache_flush(int fd, unsigned int offset, unsigned int length) {
     pmem_region region = { 0, 0 };
-    int         err = -1; 
+    int err = -1;
 
     if (fd < 0 || offset == 0 || length == 0) {
         LOGE("pmem_cache_flush: invalide argument\n");
         return;
-    }   
+    }
 
     region.offset = offset;
     region.len = length;
     err = ioctl(fd, PMEM_CACHE_FLUSH, &region);
     if (IOCTL_FAILED == err)
-    {   
+    {
         LOGE("PMEM_CACHE_FLUSH offset 0x%08x, size %d failed!\n", offset, length);
     }
 }
-
-
 
 /* No clean & INV function in ICS */
 #if 0
 void pmem_cache_clean(int fd, unsigned int offset, unsigned int length) {
     pmem_region region = { 0, 0 };
-    int         err = -1; 
+    int err = -1;
 
     if (fd < 0 || offset == 0 || length == 0) {
         LOGE("pmem_cache_clean: invalide argument\n");
         return;
-    }   
+    }
 
     region.offset = offset;
     region.len = length;
     err = ioctl(fd, PMEM_CACHE_CLEAN, &region);
     if (IOCTL_FAILED == err)
-    {   
+    {
         LOGE("PMEM_CACHE_CLEAN offset 0x%08x, size %d failed!\n", offset, length);
     }
 }
 
-
 void pmem_cache_inv(int fd, unsigned int offset, unsigned int length) {
     pmem_region region = { 0, 0 };
-    int         err = -1; 
+    int err = -1;
 
     if (fd < 0 || offset == 0 || length == 0) {
         LOGE("pmem_cache_inv: invalide argument\n");
         return;
-    }   
+    }
 
     region.offset = offset;
     region.len = length;
     err = ioctl(fd, PMEM_CACHE_INV, &region);
     if (IOCTL_FAILED == err)
-    {   
+    {
         LOGE("PMEM_CACHE_INV offset 0x%08x, size %d failed!\n", offset, length);
     }
 }

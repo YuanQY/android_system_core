@@ -36,12 +36,12 @@ static void traceInit()
 #if defined(TARGET_JB_TRACER)
 
 namespace android {
-	
+
 	volatile int32_t Tracer::sIsReady = 0;
 	int Tracer::sTraceFD = -1;
 	uint64_t Tracer::sEnabledTags = 0;
 	Mutex Tracer::sMutex;
-	
+
 	void Tracer::changeCallback() {
 		Mutex::Autolock lock(sMutex);
 		if (sIsReady && sTraceFD >= 0) {
