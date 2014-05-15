@@ -211,6 +211,13 @@ static const struct android_id_info android_ids[] = {
     { "mot_dlna",  AID_MOT_DLNA, },
 #endif
 
+// Engle, add for MTK, start
+#if defined(TARGET_MTK)
+    { "nvram", AID_NVRAM, },
+    { "ccci", AID_CCCI, },
+#endif
+// Engle, add for MTK, end
+
     { "misc",          AID_MISC, },
     { "nobody",        AID_NOBODY, },
     { "theme_man", AID_THEMEMAN },
