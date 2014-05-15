@@ -117,9 +117,8 @@ LOCAL_SRC_FILES := $(commonSources) \
 
 
 #Engle, add for MTK, start
-ifeq($(TARGET_BOARD_PLATFORM), MT6589)
-LOCAL_SRC_FILES += \
-        pmem-dev.cpp \
+ifeq ($(TARGET_BOARD_PLATFORM),MT6589)
+LOCAL_SRC_FILES += pmem-dev.cpp
 endif # !MT6589
 #Engle, add for MTK, end
 
