@@ -426,3 +426,26 @@ int __android_log_btwrite(int32_t tag, char type, const void *payload,
 
     return write_to_log(LOG_ID_EVENTS, vec, 3);
 }
+
+// Engle, add for MTK, start
+#if defined(TARGET_MTK)
+
+struct xlog_record {
+        const char *tag_str;
+        const char *fmt_str;
+        int prio;
+};
+
+int __xlog_buf_printf(int bufid, const struct xlog_record *rec, ...)
+{
+    va_list ap;
+    char buf[LOG_BUF_SIZE];
+
+    va_start(ap, rec->fmt_str);
+    vsnprintf(buf, LOG_BUF_SIZE, rec->fmt_str, ap);
+    va_end(ap);
+
+    return __android_log_buf_write(bufid, rec->prio, rec->tag_str, buf);
+}
+#endif
+// Engle, add for MTK, end
