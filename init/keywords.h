@@ -108,7 +108,7 @@ enum {
     KEYWORD(chmod,       COMMAND, 2, do_chmod)
     KEYWORD(loglevel,    COMMAND, 1, do_loglevel)
 // Engle, add for MTK, start
-#if defined(TARGET_JB_TRACER)
+#if defined(TARGET_MTK)
     KEYWORD(mknod,       COMMAND, 4, do_mknod)
 #endif
 // Engle, add for MTK, end

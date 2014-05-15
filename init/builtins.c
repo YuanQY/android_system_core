@@ -392,7 +392,7 @@ int do_mkdir(int nargs, char **args)
 }
 
 // Engle, add for MTK, start
-#if defined(TARGET_JB_TRACER)
+#if defined(TARGET_MTK)
 int do_mknod(int nargs, char **args)
 {
     dev_t dev;

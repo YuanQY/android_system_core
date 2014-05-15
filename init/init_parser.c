@@ -128,7 +128,7 @@ int lookup_keyword(const char *s)
         if (!strcmp(s, "ount_all")) return K_mount_all;
         if (!strcmp(s, "ount")) return K_mount;
 // Engle, add for MTK, start
-#if defined(TARGET_JB_TRACER)
+#if defined(TARGET_MTK)
         if (!strcmp(s, "knod")) return K_mknod;
 #endif
 // Engle, add for MTK, end
