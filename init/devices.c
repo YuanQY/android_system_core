@@ -30,10 +30,14 @@
 #include <sys/un.h>
 #include <linux/netlink.h>
 
+// Engle, port from cm-10.1, the kernel still not OK.
+
+#ifdef HAVE_SELINUX
 #include <selinux/selinux.h>
 #include <selinux/label.h>
 #include <selinux/android.h>
 #include <selinux/avc.h>
+#endif
 
 #include <private/android_filesystem_config.h>
 #include <sys/time.h>
@@ -52,7 +56,11 @@
 #define FIRMWARE_DIR2   "/vendor/firmware"
 #define FIRMWARE_DIR3   "/firmware/image"
 
+// Engle, port from cm-10.1, the kernel still not OK.
+
+#ifdef HAVE_SELINUX
 extern struct selabel_handle *sehandle;
+#endif
 
 static int device_fd = -1;
 
@@ -128,8 +136,10 @@ void fixup_sys_perms(const char *upath)
     char buf[512];
     struct listnode *node;
     struct perms_ *dp;
+    // Engle, port from cm-10.1, the kernel still not OK.
+#ifdef HAVE_SELINUX
     char *secontext;
-
+#endif
         /* upaths omit the "/sys" that paths in this list
          * contain, so we add 4 when comparing...
          */
@@ -150,6 +160,10 @@ void fixup_sys_perms(const char *upath)
         INFO("fixup %s %d %d 0%o\n", buf, dp->uid, dp->gid, dp->perm);
         chown(buf, dp->uid, dp->gid);
         chmod(buf, dp->perm);
+
+        // Engle, port from cm-10.1, the kernel still not OK.
+
+#ifdef HAVE_SELINUX
         if (sehandle) {
             secontext = NULL;
             selabel_lookup(sehandle, &secontext, buf, 0);
@@ -158,6 +172,7 @@ void fixup_sys_perms(const char *upath)
                 freecon(secontext);
            }
         }
+#endif
     }
 }
 
@@ -200,15 +215,23 @@ static void make_device(const char *path,
     unsigned gid;
     mode_t mode;
     dev_t dev;
+
+// Engle, port from cm-10.1, the kernel still not OK.
+
+#ifdef HAVE_SELINUX
     char *secontext = NULL;
+#endif
 
     mode = get_device_perm(path, &uid, &gid) | (block ? S_IFBLK : S_IFCHR);
 
+// Engle, port from cm-10.1, the kernel still not OK.
+
+#ifdef HAVE_SELINUX
     if (sehandle) {
         selabel_lookup(sehandle, &secontext, path, mode);
         setfscreatecon(secontext);
     }
-
+#endif
     dev = makedev(major, minor);
     /* Temporarily change egid to avoid race condition setting the gid of the
      * device node. Unforunately changing the euid would prevent creation of
@@ -220,10 +243,14 @@ static void make_device(const char *path,
     chown(path, uid, -1);
     setegid(AID_ROOT);
 
+// Engle, port from cm-10.1, the kernel still not OK.
+
+#ifdef HAVE_SELINUX
     if (secontext) {
         freecon(secontext);
         setfscreatecon(NULL);
     }
+#endif
 }
 
 static void add_platform_device(const char *path)
@@ -867,7 +894,9 @@ void handle_device_fd()
 
         struct uevent uevent;
         parse_event(msg, &uevent);
+// Engle, port from cm-10.1, the kernel still not OK.
 
+#ifdef HAVE_SELINUX
         if (sehandle && selinux_status_updated() > 0) {
             struct selabel_handle *sehandle2;
             sehandle2 = selinux_android_file_context_handle();
@@ -876,6 +905,7 @@ void handle_device_fd()
                 sehandle = sehandle2;
             }
         }
+#endif
 
         handle_device_event(&uevent);
         handle_firmware_event(&uevent);
@@ -940,12 +970,15 @@ void device_init(void)
     struct stat info;
     int fd;
 
+// Engle, port from cm-10.1, the kernel still not OK.
+
+#ifdef HAVE_SELINUX
     sehandle = NULL;
     if (is_selinux_enabled() > 0) {
         sehandle = selinux_android_file_context_handle();
         selinux_status_open(true);
     }
-
+#endif
     /* is 256K enough? udev uses 16MB! */
     device_fd = uevent_open_socket(256*1024, true);
     if(device_fd < 0)

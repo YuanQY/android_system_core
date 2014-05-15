@@ -66,9 +66,15 @@ LOCAL_STATIC_LIBRARIES := \
 	libcutils \
 	liblog \
 	libc \
-	libselinux \
 	libmincrypt \
 	libext4_utils_static
+
+# Engle, port from CM-10.1, kernel still not OK for SElinux
+ifeq ($(HAVE_SELINUX),true)
+LOCAL_STATIC_LIBRARIES += libselinux
+LOCAL_C_INCLUDES += external/libselinux/include
+LOCAL_CFLAGS += -DHAVE_SELINUX
+endif
 
 ifneq ($(strip $(TARGET_INIT_VENDOR_LIB)),)
 LOCAL_WHOLE_STATIC_LIBRARIES += $(TARGET_INIT_VENDOR_LIB)

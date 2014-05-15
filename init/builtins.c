@@ -38,8 +38,11 @@
 #include <fs_mgr.h>
 #include <fts.h>
 
+// Engle, port from cm-10.1, the kernel still not OK.
+#ifdef HAVE_SELINUX
 #include <selinux/selinux.h>
 #include <selinux/label.h>
+#endif
 
 #include "init.h"
 #include "keywords.h"
@@ -620,20 +623,30 @@ int do_swapon_all(int nargs, char **args)
 }
 
 int do_setcon(int nargs, char **args) {
+
+// Engle, port from cm-10.1, the kernel still not OK.
+
+#ifdef HAVE_SELINUX
     if (is_selinux_enabled() <= 0)
         return 0;
     if (setcon(args[1]) < 0) {
         return -errno;
     }
+#endif
     return 0;
 }
 
 int do_setenforce(int nargs, char **args) {
+
+// Engle, port from cm-10.1, the kernel still not OK.
+
+#ifdef HAVE_SELINUX
     if (is_selinux_enabled() <= 0)
         return 0;
     if (security_setenforce(atoi(args[1])) < 0) {
         return -errno;
     }
+#endif
     return 0;
 }
 
@@ -950,6 +963,10 @@ int do_restorecon_recursive(int nargs, char **args) {
 }
 
 int do_setsebool(int nargs, char **args) {
+
+// Engle, port from cm-10.1, the kernel still not OK.
+
+#ifdef HAVE_SELINUX
     const char *name = args[1];
     const char *value = args[2];
     SELboolean b;
@@ -973,7 +990,7 @@ int do_setsebool(int nargs, char **args) {
         ERROR("setsebool: could not set %s to %s\n", name, value);
         return ret;
     }
-
+#endif
     return 0;
 }
 
