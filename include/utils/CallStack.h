@@ -73,6 +73,20 @@ public:
              android_LogPriority priority = ANDROID_LOG_DEBUG,
              const char* prefix = 0) const;
 
+
+// Engle, add for MTK, start
+#if defined(TARGET_MTK)
+
+
+    // Immediately collect the stack traces for the specified thread.
+    // need to chagne frameworks/native/opengl/libs/EGL/trace.cpp:473
+    void update(int32_t ignoreDepth, int32_t maxDepth);
+
+    // Dump a stack trace to the log
+    void dump(const char* prefix = 0) const;
+#endif
+// Engle, add for MTK, end.
+
     // Dump a stack trace to the specified file descriptor.
     void dump(int fd, int indent = 0, const char* prefix = 0) const;
 
