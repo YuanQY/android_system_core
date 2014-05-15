@@ -42,7 +42,7 @@ int do_load_persist_props(int nargs, char **args);
 int do_wait(int nargs, char **args);
 
 // Engle, add for MTK, start
-#if defined(TARGET_JB_TRACER)
+#if defined(TARGET_MTK)
 int do_mknod(int nargs, char **args);
 #endif
 // Engle, add for MTK, end

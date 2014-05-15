@@ -18,7 +18,7 @@
 #include <utils/Trace.h>
 
 // Engle, add for MTK, start
-#if defined(TARGET_MTK)
+#if defined(TARGET_JB_TRACER)
 #define LOG_TAG "Trace"
 #include <cutils/properties.h>
 #include <utils/Log.h>

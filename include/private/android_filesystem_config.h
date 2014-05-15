@@ -113,6 +113,13 @@
 #define AID_MOT_DLNA      9011  /* DLNA native */
 #endif // MOTOROLA_UIDS
 
+// Engle, add for MTK, start
+#if defined(TARGET_MTK)
+#define AID_CCCI          9996
+#define AID_NVRAM         9997
+#endif // TARGET_MTK
+// Engle, add for MTK, end
+
 #define AID_MISC          9998  /* access to misc storage */
 #define AID_NOBODY        9999
 
