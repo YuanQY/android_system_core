@@ -77,7 +77,6 @@ public:
 // Engle, add for MTK, start
 #if defined(TARGET_MTK)
 
-
     // Immediately collect the stack traces for the specified thread.
     // need to chagne frameworks/native/opengl/libs/EGL/trace.cpp:473
     void update(int32_t ignoreDepth, int32_t maxDepth);
