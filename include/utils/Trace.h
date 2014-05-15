@@ -59,19 +59,35 @@ class Tracer {
 
 	static inline void traceCounter(uint64_t tag, const char* name,
 											int32_t value) {
+			if (CC_UNLIKELY(isTagEnabled(tag))) {
+			char buf[1024];
+			snprintf(buf, 1024, "C|%d|%s|%d", getpid(), name, value);
+			write(sTraceFD, buf, strlen(buf));
+		}
 	}
 
 	static inline void traceBegin(uint64_t tag, const char* name) {
+		if (CC_UNLIKELY(isTagEnabled(tag))) {
+			char buf[1024];
+			size_t len = snprintf(buf, 1024, "B|%d|%s", getpid(), name);
+			write(sTraceFD, buf, len);
+		}
 	}
 
 	static inline void traceEnd(uint64_t tag) {
-  }
+		if (CC_UNLIKELY(isTagEnabled(tag))) {
+			char buf = 'E';
+			write(sTraceFD, &buf, 1);
+		}
+	}
 
 	private:
 
 	static inline void initIfNeeded() {
+		if (!android_atomic_acquire_load(&sIsReady)) {
+			init();
+		}
 	}
-
 	static void changeCallback();
 
 	// init opens the trace marker file for writing and reads the
