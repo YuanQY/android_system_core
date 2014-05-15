@@ -311,7 +311,7 @@ int  pmem_free(void *ptr, size_t size, int fd)
     {
         LOGE("mumap size %d failed!", size);
         ret = err;
-    }    
+    }
 
     err = close(fd);
     if (CLOSE_FAILED == err)

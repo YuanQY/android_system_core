@@ -422,7 +422,7 @@ int do_mknod(int nargs, char **args)
 
     return 0;
 }
-#endif     
+#endif
 // Engle, add for MTK, end
 
 static struct {

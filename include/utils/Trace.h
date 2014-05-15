@@ -41,7 +41,7 @@
 #define ATRACE_CALL() ATRACE_NAME(__FUNCTION__)
 
 namespace android {
-	
+
 // Engle, add for MTK, start
 #if defined(TARGET_JB_TRACER)
 class Tracer {
