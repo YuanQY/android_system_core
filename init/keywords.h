@@ -40,6 +40,13 @@ int do_chmod(int nargs, char **args);
 int do_loglevel(int nargs, char **args);
 int do_load_persist_props(int nargs, char **args);
 int do_wait(int nargs, char **args);
+
+// Engle, add for MTK, start
+#if defined(TARGET_JB_TRACER)
+int do_mknod(int nargs, char **args);
+#endif
+// Engle, add for MTK, end
+
 #define __MAKE_KEYWORD_ENUM__
 #define KEYWORD(symbol, flags, nargs, func) K_##symbol,
 enum {
@@ -100,6 +107,11 @@ enum {
     KEYWORD(chown,       COMMAND, 2, do_chown)
     KEYWORD(chmod,       COMMAND, 2, do_chmod)
     KEYWORD(loglevel,    COMMAND, 1, do_loglevel)
+// Engle, add for MTK, start
+#if defined(TARGET_JB_TRACER)
+    KEYWORD(mknod,       COMMAND, 4, do_mknod)
+#endif
+// Engle, add for MTK, end
     KEYWORD(load_persist_props,    COMMAND, 0, do_load_persist_props)
     KEYWORD(ioprio,      OPTION,  0, 0)
 #ifdef __MAKE_KEYWORD_ENUM__
