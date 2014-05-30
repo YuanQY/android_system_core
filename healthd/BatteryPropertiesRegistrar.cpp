@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#define LOG_TAG "healthd"
+#include <cutils/klog.h>
 
 #include "BatteryPropertiesRegistrar.h"
 #include <batteryservice/BatteryService.h>

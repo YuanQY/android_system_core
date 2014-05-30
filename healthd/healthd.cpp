@@ -131,6 +131,7 @@ static void periodic_chores() {
 }
 
 static void uevent_init(void) {
+	  KLOG_INFO(LOG_TAG, "Enter uevent_init\n");
     uevent_fd = uevent_open_socket(64*1024, true);
 
     if (uevent_fd >= 0)
@@ -202,6 +203,7 @@ static void healthd_mainloop(void) {
     struct epoll_event ev;
     int epollfd;
     int maxevents = 0;
+    KLOG_INFO(LOG_TAG, "Enter healthd_mainloop\n");
 
     epollfd = epoll_create(MAX_EPOLL_EVENTS);
     if (epollfd == -1) {
@@ -267,6 +269,7 @@ static void healthd_mainloop(void) {
             periodic_chores();
     }
 
+		KLOG_INFO(LOG_TAG, "Exit healthd_mainloop\n");
     return;
 }
 
