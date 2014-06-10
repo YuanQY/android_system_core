@@ -1005,3 +1005,14 @@ int ifc_set_mtu(const char *name, int mtuSz)
 
     return ret;
 }
+
+// Engle, add for MTK, start
+#ifdef TARGET_MTK
+
+int ifc_set_throttle(const char *ifname, int downlink, int uplink)
+{
+    return -1;
+}
+
+#endif
+// Engle, add for MTK, end

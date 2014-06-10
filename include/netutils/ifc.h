@@ -74,6 +74,12 @@ extern int ipv4NetmaskToPrefixLength(in_addr_t mask);
 
 extern in_addr_t prefixLengthToIpv4Netmask(int prefix_length);
 
+// Engle, add for MTK, start
+#ifdef TARGET_MTK
+extern int ifc_set_throttle(const char *name, int downlink, int uplink);
+#endif
+// Engle, add for MTK, end
+
 __END_DECLS
 
 #endif /* _NETUTILS_IFC_H_ */
