@@ -85,6 +85,18 @@ enum {
     // request FRAME and METADATA. Or the apps can request only FRAME or only
     // METADATA.
     CAMERA_MSG_PREVIEW_METADATA = 0x0400, // dataCallback
+
+#ifdef TARGET_MTK
+    MTK_CAMERA_MSG_EXT_DATA                    = 0x80000000, // dataCallback
+    MTK_CAMERA_MSG_EXT_DATA_AUTORAMA           = 0x00000001,
+    MTK_CAMERA_MSG_EXT_DATA_AF                 = 0x00000002,
+    MTK_CAMERA_MSG_EXT_DATA_BURST_SHOT         = 0x00000003,
+    MTK_CAMERA_MSG_EXT_NOTIFY                  = 0x40000000, // dataCallback
+    MTK_CAMERA_MSG_EXT_NOTIFY_SMILE_DETECT     = 0x00000001,
+    MTK_CAMERA_MSG_EXT_NOTIFY_ASD              = 0x00000002,
+    MTK_CAMERA_MSG_EXT_NOTIFY_MAV              = 0x00000003,
+    MTK_CAMERA_MSG_EXT_NOTIFY_CONTINUOUS_END   = 0x00000006, // dataCallback
+#endif
     // Notify on autofocus start and stop. This is useful in continuous
     // autofocus - FOCUS_MODE_CONTINUOUS_VIDEO and FOCUS_MODE_CONTINUOUS_PICTURE.
 #if defined(QCOM_ICS_COMPAT) && defined(QCOM_HARDWARE)
