@@ -100,6 +100,7 @@ enum {
     MTK_CAMERA_MSG_EXT_NOTIFY_CONTINUOUS_END     = 0x00000006, // dataCallback
     MTK_CAMERA_MSG_EXT_NOTIFY_CAPTURE_DONE       = 0x00000010,
     MTK_CAMERA_MSG_EXT_NOTIFY_SHUTTER            = 0x00000011,
+    MTK_CAMERA_MSG_EXT_DATA_COMPRESSED_IMAGE     = 0x00000010,
 #endif
     // Notify on autofocus start and stop. This is useful in continuous
     // autofocus - FOCUS_MODE_CONTINUOUS_VIDEO and FOCUS_MODE_CONTINUOUS_PICTURE.
